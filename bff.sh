@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# Version 5: remove .incomplete for unavailable profiles
+# Version 4: -- mistake
 # Version 3: solves problem with album photos without a title
 # Version 2: redo incomplete profiles 
 # Version 1: last unversioned version
@@ -116,7 +118,8 @@ fi
 # is this profile available?
 if grep -q "This user's profile is not available." $PROFILE_DIR/profile.html
 then
-  echo "  Not available."
+  echo "   Not available."
+  rm $PROFILE_DIR/.incomplete
   exit 5
 fi
 
