@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Version 7: show a warning that downloading a blog can take a LONG time
 # Version 6: print a notice if the login has failed (but continue the download)
 # Version 5: remove .incomplete for unavailable profiles
 # Version 4: -- mistake
@@ -416,6 +417,7 @@ then
   mkdir -p $PROFILE_DIR/blog
 
   echo " - blog: $blog_url"
+  echo "   (depending on the size of the blog, this can take a very long time)"
   wget --directory-prefix="$PROFILE_DIR/blog/" \
        -e robots=off \
        -a "$PROFILE_DIR/wget.log" \
