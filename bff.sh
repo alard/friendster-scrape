@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Version 6: print a notice if the login has failed (but continue the download)
 # Version 5: remove .incomplete for unavailable profiles
 # Version 4: -- mistake
 # Version 3: solves problem with album photos without a title
@@ -335,6 +336,19 @@ do
 
   let "page = $page + 1"
 done
+
+# check the login box on the comments page
+if ! grep -q "View, edit or update your profile" $PROFILE_DIR/comments_0.html
+then
+  echo ""
+  echo "NOTE: It seems that you are not logged in."
+  echo "      Most of a profile can be downloaded without a login,"
+  echo "      but the Comments and Testimonials can not."
+  echo "      Please check your username and password."
+  echo ""
+  echo "      (This script will continue, but you should really start again.)"
+  echo ""
+fi
 
 # download shoutout stream
 page=1
