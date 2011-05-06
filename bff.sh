@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Version 8: grab all files for blogs.
 # Version 7: show a warning that downloading a blog can take a LONG time
 # Version 6: print a notice if the login has failed (but continue the download)
 # Version 5: remove .incomplete for unavailable profiles
@@ -414,6 +415,9 @@ then
   blog_domain=${blog_url#http://}
   blog_domain=${blog_domain%/}
 
+  blog_host=${blog_domain%.blogs.friendster.com}
+  blog_host=${blog_host%.blog.friendster.com}
+
   mkdir -p $PROFILE_DIR/blog
 
   echo " - blog: $blog_url"
@@ -422,8 +426,9 @@ then
        -e robots=off \
        -a "$PROFILE_DIR/wget.log" \
        -nv --mirror -np -E -H -k -K -p \
-       -D "$blog_domain" http://$blog_domain/ \
-       -U "$USER_AGENT"
+       -U "$USER_AGENT" \
+       -D "${blog_host}.blog.friendster.com,${blog_host}.blogs.friendster.com" \
+       http://$blog_domain/
 fi
 
 
