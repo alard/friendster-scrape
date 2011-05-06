@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Version 10: some textual changes and a better check for the login result
 # Version 9: fix photo regex issue with older versions of GNU grep
 # Version 8: grab all files for blogs.
 # Version 7: show a warning that downloading a blog can take a LONG time
@@ -76,7 +77,7 @@ WGET="wget --no-clobber -nv -a $PROFILE_DIR/wget.log"
 # incomplete result from a previous run?
 if [ -f $PROFILE_DIR/.incomplete ]
 then
-  echo "Deleting incomplete profile..."
+  echo "Deleting incomplete profile $PROFILE_ID..."
   rm -rf $PROFILE_DIR
 fi
 
@@ -114,14 +115,25 @@ if ! grep -q "View, edit or update your profile" $PROFILE_DIR/profile.html
 then
   echo "Logging in..."
   rm -f $COOKIES_FILE
-  $WGET -U "$USER_AGENT" http://www.friendster.com/login.php --max-redirect=0 --keep-session-cookies --save-cookies $COOKIES_FILE --load-cookies $COOKIES_FILE --post-data="_submitted=1&next=/&tzoffset=-120&email=$USERNAME&password=$PASSWORD"
+  rm -f login_result.html
+
+  $WGET -U "$USER_AGENT" http://www.friendster.com/login.php -O login_result.html --keep-session-cookies --save-cookies $COOKIES_FILE --load-cookies $COOKIES_FILE --post-data="_submitted=1&next=/&tzoffset=-120&email=$USERNAME&password=$PASSWORD"
+
+  if grep -q "Log Out" login_result.html
+  then
+    echo "Login successful."
+  else
+    echo "Login failed."
+  fi
+
+  rm -f login_result.html
 fi
 
 
 # is this profile available?
 if grep -q "This user's profile is not available." $PROFILE_DIR/profile.html
 then
-  echo "   Not available."
+  echo "   Profile $PROFILE_ID not available."
   rm $PROFILE_DIR/.incomplete
   exit 5
 fi
@@ -350,6 +362,8 @@ then
   echo ""
   echo "      (This script will continue, but you should really start again.)"
   echo ""
+
+  touch $PROFILE_DIR/.without_login
 fi
 
 # download shoutout stream
