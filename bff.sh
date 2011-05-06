@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Version 9: fix photo regex issue with older versions of GNU grep
 # Version 8: grab all files for blogs.
 # Version 7: show a warning that downloading a blog can take a LONG time
 # Version 6: print a notice if the login has failed (but continue the download)
