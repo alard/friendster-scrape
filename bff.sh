@@ -42,7 +42,6 @@ PASSWORD=`cat password.txt`
 USERNAME=${USERNAME/ /}
 PASSWORD=${PASSWORD/ /}
 
-
 if [[ ! $USERNAME =~ @ ]]
 then
   echo "Enter your username (your Friendster email) in username.txt and your password in password.txt."
@@ -205,7 +204,7 @@ do
     done
 
     # get photo urls
-    PHOTO_URLS=`grep -o -E "http://photos\S+friendster\.com/photos/\S+m\.jpg" $PROFILE_DIR/photos_${id}_${page}.html | sort | uniq`
+    PHOTO_URLS=`grep -o -E "http://photos[^\s]+friendster\.com/photos/[^\s]+m\.jpg" $PROFILE_DIR/photos_${id}_${page}.html | sort | uniq`
 
     # download photos
     for photo_url in $PHOTO_URLS
