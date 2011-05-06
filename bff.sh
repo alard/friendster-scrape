@@ -203,7 +203,7 @@ do
     done
 
     # get photo urls
-    PHOTO_URLS=`grep -o -E "http://photos.+friendster\.com/photos/.+m\.jpg" $PROFILE_DIR/photos_${id}_${page}.html | sort | uniq`
+    PHOTO_URLS=`grep -o -E "http://photos[^\s]+friendster\.com/photos/[^\s]+m\.jpg" $PROFILE_DIR/photos_${id}_${page}.html | sort | uniq`
 
     # download photos
     for photo_url in $PHOTO_URLS
