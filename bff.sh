@@ -115,18 +115,19 @@ if ! grep -q "View, edit or update your profile" $PROFILE_DIR/profile.html
 then
   echo "Logging in..."
   rm -f $COOKIES_FILE
-  rm -f login_result.html
+  login_result_file=login_result_$$.html
+  rm -f $login_result_file
 
-  $WGET -U "$USER_AGENT" http://www.friendster.com/login.php -O login_result.html --keep-session-cookies --save-cookies $COOKIES_FILE --load-cookies $COOKIES_FILE --post-data="_submitted=1&next=/&tzoffset=-120&email=$USERNAME&password=$PASSWORD"
+  $WGET -U "$USER_AGENT" http://www.friendster.com/login.php -O $login_result_file --keep-session-cookies --save-cookies $COOKIES_FILE --load-cookies $COOKIES_FILE --post-data="_submitted=1&next=/&tzoffset=-120&email=$USERNAME&password=$PASSWORD"
 
-  if grep -q "Log Out" login_result.html
+  if grep -q "Log Out" $login_result_file
   then
     echo "Login successful."
   else
     echo "Login failed."
   fi
 
-  rm -f login_result.html
+  rm -f $login_result_file
 fi
 
 
