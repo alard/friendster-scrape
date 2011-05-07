@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Version 11: limit the depth of the blog mirroring (prevents infinite recursion on blogs with problems)
 # Version 10: some textual changes and a better check for the login result
 # Version 9: fix photo regex issue with older versions of GNU grep
 # Version 8: grab all files for blogs.
@@ -440,7 +441,8 @@ then
   wget --directory-prefix="$PROFILE_DIR/blog/" \
        -e robots=off \
        -a "$PROFILE_DIR/wget.log" \
-       -nv --mirror -np -E -H -k -K -p \
+       -nv -N -r -l 20 --no-remove-listing \
+       -np -E -H -k -K -p \
        -U "$USER_AGENT" \
        -D "${blog_host}.blog.friendster.com,${blog_host}.blogs.friendster.com" \
        http://$blog_domain/
